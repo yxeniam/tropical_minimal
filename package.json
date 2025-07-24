@@ -1,0 +1,9 @@
+{
+  "name": "tropical_minimal",
+  "displayName": "Tropical Minimal",
+  "version": "1.0.0",
+  "description": "Un tema personalizado para Logseq con estética plana y colores Nord.",
+  "main": "custom.css",
+  "license": "MIT",
+  "repo": "https://github.com/yxeniam/tropical_minimal"
+}

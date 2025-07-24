@@ -1,0 +1,508 @@
+/*
+ * Logseq Custom Theme - Iteración 3
+ * Diseñado por [@yxeniam]
+ *
+ * Esta versión integra las siguientes preferencias:
+ * - Fuente: "thin" (Inter, Source Sans 3) para texto y títulos (sin negrita).
+ * - Paleta de colores: Nord Theme sobre fondo blanco (modo claro principal), con modo oscuro.
+ * - Estilo de queries: Contenedor sutilmente marcado, similar a Dev Theme.
+ * - Apariencia de páginas de código (ej. custom.css): Estilo limpio de Dev Theme.
+ * - Tareas y prioridades: Texto de color y letra de prioridad en cuadrado.
+ * - Notas especiales (callouts): Íconos de Nord, fondo plano de One Theme.
+ * - Tablas de queries: Espaciado de Slavsko Theme.
+ * - Estética general: Plana, basada en líneas, sin redondeos ni sombras excesos.
+ */
+
+/* --- 1. Importación de Fuentes --- */
+/* Inter (versátil, variantes delgadas) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+/* Source Sans 3 (moderna sans-serif, usada en Dev Theme) */
+@import url('https://cdn.jsdelivr.net/npm/@adobe-fonts/source-sans-3@3.046R/css/source-sans-3.min.css');
+/* Fira Code (para bloques de código, como en Dev Theme) */
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code&display=swap");
+
+
+/* --- 2. Paleta de Colores (Basada en Nord Theme) --- */
+/* Definición de colores Nord como variables CSS */
+:root {
+  /* Modo Claro (Principal) */
+  --ls-primary-background-color: #ECEFF4; /* Nord0 - Fondo más claro (casi blanco) */
+  --ls-secondary-background-color: #E5E9F0; /* Nord1 - Más oscuro para elementos secundarios (sidebar, header, fondos sutiles) */
+  --ls-tertiary-background-color: #D8DEE9; /* Nord2 - Aún más oscuro para bordes/separadores */
+  --ls-quaternary-background-color: #BFCAF0; /* Nord3 - Texto/primer plano más claro (menos usado) */
+  --ls-text-color: #2E3440; /* Nord4 - Texto oscuro para legibilidad */
+  --ls-link-text-color: #88C0D0; /* Nord8 - Azul claro para enlaces */
+  --ls-highlight-background-color: #A3BE8C; /* Nord14 - Verde para resaltados de bloque */
+  --ls-selection-background-color: #E0E2E7; /* Gris claro personalizado para selección de bloque */
+  --ls-border-color: #D8DEE9; /* Nord2 - Bordes sutiles */
+  --ls-block-ref-link-text-color: #81A1C1; /* Nord9 - Azul para referencias de bloque */
+  --ls-tag-text-color: #B48EAD; /* Nord10 - Morado para etiquetas */
+  --ls-property-key-color: #A3BE8C; /* Nord14 - Verde para claves de propiedad */
+  --ls-property-value-color: #5E81AC; /* Nord11 - Azul más oscuro para valores de propiedad */
+
+  /* Colores de Acento (Nord) */
+  --nord-red: #BF616A;    /* Nord11 */
+  --nord-orange: #D08770; /* Nord12 */
+  --nord-yellow: #EBCB8B; /* Nord13 */
+  --nord-green: #A3BE8C;  /* Nord14 */
+  --nord-teal: #8FBCBB;   /* Nord7 */
+  --nord-blue: #81A1C1;   /* Nord9 */
+  --nord-purple: #B48EAD; /* Nord10 */
+
+  /* Colores específicos para prioridad de tareas */
+  --ls-task-priority-a-color: var(--nord-red);
+  --ls-task-priority-b-color: var(--nord-yellow);
+  --ls-task-priority-c-color: var(--nord-green);
+
+  /* Fondo punteado del Whiteboard */
+  --ls-wb-background-pattern: radial-gradient(circle, var(--ls-tertiary-background-color) 1px, transparent 1px);
+  --ls-wb-background-size: 20px 20px;
+}
+
+/* Modo Oscuro */
+html[data-theme="dark"] {
+  --ls-primary-background-color: #2E3440; /* Nord3 - Fondo oscuro */
+  --ls-secondary-background-color: #3B4252; /* Nord4 - Más claro para elementos secundarios */
+  --ls-tertiary-background-color: #4C566A; /* Nord5 - Aún más claro para bordes/separadores */
+  --ls-quaternary-background-color: #D8DEE9; /* Nord2 - Texto/primer plano más claro */
+  --ls-text-color: #ECEFF4; /* Nord0 - Texto claro */
+  --ls-link-text-color: #88C0D0; /* Nord8 - Azul claro para enlaces */
+  --ls-highlight-background-color: #A3BE8C; /* Nord14 - Verde para resaltados */
+  --ls-selection-background-color: #4C566A; /* Gris oscuro personalizado para selección */
+  --ls-border-color: #4C566A; /* Nord5 - Bordes sutiles */
+  --ls-block-ref-link-text-color: #81A1C1; /* Nord9 - Azul para referencias de bloque */
+  --ls-tag-text-color: var(--nord-purple); /* Nord10 - Morado para etiquetas */
+  --ls-property-key-color: var(--nord-green); /* Nord14 - Verde para claves de propiedad */
+  --ls-property-value-color: var(--nord-blue); /* Nord11 - Azul más oscuro para valores de propiedad */
+
+  /* Colores específicos para prioridad de tareas en modo oscuro */
+  --ls-task-priority-a-color: var(--nord-red);
+  --ls-task-priority-b-color: var(--nord-yellow);
+  --ls-task-priority-c-color: var(--nord-green);
+}
+
+
+/* --- 3. Estética General: Plana, Sin Bordes Redondeados, Fuente, Espaciado --- */
+
+/* Fuente base y tamaño general */
+body,
+.ls-block,
+.editor-inner,
+.form-text,
+.form-control,
+.cp__sidebar-main-content,
+.cp__header,
+.cp__sidebar-left,
+.cp__sidebar-right,
+.block-content,
+.query-table,
+.query-table th,
+.query-table td,
+.extensions__body,
+.extensions__item,
+.ui__modal,
+.ui__modal-content,
+.ls-page-title,
+.CodeMirror { /* Incluye CodeMirror para la fuente */
+  font-family: "Inter", "Source Sans 3", sans-serif !important;
+  font-weight: 300; /* Peso delgado para el texto del cuerpo */
+  font-size: 0.88em; /* Ligeramente más pequeño que el predeterminado */
+  line-height: 1.6; /* Buena legibilidad */
+  border-radius: 0 !important; /* Asegura que no haya esquinas redondeadas */
+}
+
+/* Elimina bordes redondeados y sombras de la mayoría de los elementos */
+.ls-block,
+.ls-page-title,
+.editor-inner,
+.form-text,
+.form-control,
+.cp__sidebar-main-content,
+.cp__header,
+.cp__sidebar-left,
+.cp__sidebar-right,
+.block-content,
+.query-table,
+.query-table th,
+.query-table td,
+.extensions__body,
+.extensions__item,
+.ui__modal,
+.ui__modal-content,
+.flex-grow,
+.flex-col,
+.border,
+.shadow-md,
+.rounded-lg,
+.rounded-md,
+.rounded-xl,
+.rounded-full,
+.shadow,
+.tippy-tooltip-content, /* Para tooltips y previsualizaciones de página */
+.tippy-popper .arrow-regular { /* Flecha de tooltips */
+  border-radius: 0 !important;
+  box-shadow: none !important; /* Elimina sombras */
+}
+
+/* Bordes planos para bloques y contenedores */
+.ls-block,
+.block-content {
+  border: none !important; /* Elimina bordes de bloque predeterminados */
+  padding-left: 0.5em; /* Ajusta el padding para una apariencia limpia */
+}
+
+/* Bloque seleccionado - fondo gris muy claro */
+.ls-block.is-active,
+.ls-block.is-selected {
+  background-color: var(--ls-selection-background-color) !important;
+}
+
+/* Encabezados - misma fuente, más grandes, sin negrita */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Inter", "Source Sans 3", sans-serif !important;
+  font-weight: 400 !important; /* Sin negrita para encabezados */
+  line-height: 1.2;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  color: var(--ls-text-color) !important; /* Asegura que el color del encabezado sea el color de texto principal */
+}
+
+h1 { font-size: 2.2em; }
+h2 { font-size: 1.8em; }
+h3 { font-size: 1.5em; }
+h4 { font-size: 1.2em; }
+h5 { font-size: 1.1em; }
+h6 { font-size: 1em; }
+
+/* Enlaces */
+a {
+  color: var(--ls-link-text-color) !important;
+  text-decoration: none; /* Sin subrayado por defecto */
+}
+a:hover {
+  text-decoration: underline; /* Subrayado al pasar el ratón */
+}
+
+/* Hashtags */
+.tag,
+.page-reference.tag {
+  color: var(--ls-tag-text-color) !important;
+  background-color: transparent !important; /* Sin fondo para etiquetas */
+  border: none !important; /* Sin borde para etiquetas */
+  font-weight: 500; /* Ligeramente más grueso para énfasis */
+}
+
+/* Propiedades (color de texto de clave y valor) */
+.block-properties .property-key {
+  color: var(--ls-property-key-color) !important;
+  font-weight: 500;
+}
+.block-properties .property-value {
+  color: var(--ls-property-value-color) !important;
+}
+
+/* --- 4. Estado de Tareas y Prioridad (Sin Íconos, Texto de Color + Letra en Cuadrado) --- */
+
+/* Color de texto general de la tarea (para TODO, LATER, NOW, DOING, WAITING) */
+.task.todo,
+.task.later,
+.task.now,
+.task.doing,
+.task.waiting {
+  color: var(--ls-text-color) !important; /* Color de texto predeterminado para tareas */
+}
+
+/* Colores específicos para marcadores de tarea (el propio cuadrado) */
+.task-list-item-checkbox {
+  border-radius: 0 !important; /* Checkbox plano */
+  border: 1px solid var(--ls-border-color) !important;
+}
+
+.task-list-item-checkbox.todo { border-color: var(--nord-blue) !important; }
+.task-list-item-checkbox.later { border-color: var(--nord-teal) !important; }
+.task-list-item-checkbox.now { border-color: var(--nord-orange) !important; }
+.task-list-item-checkbox.doing { border-color: var(--nord-yellow) !important; }
+.task-list-item-checkbox.waiting { border-color: var(--nord-purple) !important; }
+.task-list-item-checkbox.done {
+  background-color: var(--nord-green) !important;
+  border-color: var(--nord-green) !important;
+}
+.task-list-item-checkbox.canceled {
+  background-color: var(--nord-red) !important;
+  border-color: var(--nord-red) !important;
+}
+
+/* Letras de Prioridad (A, B, C) - fondo de cuadrado de color */
+.task-priority {
+  display: inline-block;
+  min-width: 1.5em; /* Cuadrado pequeño */
+  text-align: center;
+  font-size: 0.8em;
+  font-weight: 600; /* Ligeramente más grueso para la letra */
+  color: white !important; /* Texto blanco para la letra de prioridad */
+  padding: 0.1em 0.2em;
+  border-radius: 0 !important; /* Cuadrado plano */
+  margin-right: 0.3em;
+}
+
+.task-priority.A { background-color: var(--ls-task-priority-a-color) !important; }
+.task-priority.B { background-color: var(--ls-task-priority-b-color) !important; }
+.task-priority.C { background-color: var(--ls-task-priority-c-color) !important; }
+
+/* Barra de Progreso - Minimalista */
+.progress-bar {
+  height: 4px !important; /* Barra delgada */
+  background-color: var(--ls-tertiary-background-color) !important; /* Fondo para la parte vacía */
+  border-radius: 0 !important;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background-color: var(--nord-blue) !important; /* Color de acento para el relleno */
+  border-radius: 0 !important;
+  transition: width 0.3s ease-in-out;
+}
+
+
+/* --- 5. Notas Especiales (Íconos Nord, Fondo Plano de One Theme) --- */
+
+/* Estilo base para notas especiales (callouts/admonitions) */
+.admonitionblock, /* Estilo general para bloques de admonición */
+.callout { /* Estilo para la sintaxis de callout más moderna */
+  border-left: 3px solid var(--ls-border-color) !important; /* Borde izquierdo sutil */
+  background-color: var(--ls-secondary-background-color) !important; /* Fondo plano */
+  padding: 0.8em 1em;
+  margin: 1em 0;
+  border-radius: 0 !important; /* Plano */
+  box-shadow: none !important; /* Sin sombra */
+}
+
+/* Colores específicos para diferentes tipos de callouts/admonitions (usando acentos Nord) */
+.admonitionblock.info, .callout.info { border-left-color: var(--nord-blue) !important; }
+.admonitionblock.tip, .callout.tip { border-left-color: var(--nord-green) !important; }
+.admonitionblock.warning, .callout.warning { border-left-color: var(--nord-yellow) !important; }
+.admonitionblock.danger, .admonitionblock.error, .callout.danger, .callout.error { border-left-color: var(--nord-red) !important; }
+.admonitionblock.important, .callout.important { border-left-color: var(--nord-purple) !important; }
+.admonitionblock.note, .callout.note { border-left-color: var(--nord-teal) !important; }
+
+/* Íconos para callouts/admonitions (usando los íconos de Logseq o Tabler Icons si es necesario) */
+/* Dev Theme y otros usan Tabler Icons para esto. Los importaremos si es necesario,
+   pero primero intentaremos estilizar los iconos predeterminados de Logseq. */
+.admonition-icon, /* Para la sintaxis antigua de admonitionblock */
+.callout-icon { /* Para la sintaxis moderna de callout */
+  color: var(--ls-text-color) !important; /* Color de icono predeterminado */
+  margin-right: 0.5em;
+}
+.admonitionblock.info .admonition-icon, .callout.info .callout-icon { color: var(--nord-blue) !important; }
+.admonitionblock.tip .admonition-icon, .callout.tip .callout-icon { color: var(--nord-green) !important; }
+.admonitionblock.warning .admonition-icon, .callout.warning .callout-icon { color: var(--nord-yellow) !important; }
+.admonitionblock.danger .admonition-icon, .admonitionblock.error .admonition-icon, .callout.danger .callout.icon { color: var(--nord-red) !important; }
+.admonitionblock.important .admonition-icon, .callout.important .callout-icon { color: var(--nord-purple) !important; }
+.admonitionblock.note .admonition-icon, .callout.note .callout-icon { color: var(--nord-teal) !important; }
+
+
+/* --- 6. Tablas de Queries (Espaciado de Slavsko Theme) --- */
+.query-table {
+  width: 100%;
+  border-collapse: collapse; /* Asegura que los bordes colapsen */
+  margin: 1em 0;
+}
+
+.query-table th,
+.query-table td {
+  padding: 0.8em 1em !important; /* Espaciado generoso */
+  border: 1px solid var(--ls-border-color) !important; /* Bordes sutiles */
+  text-align: left;
+}
+
+.query-table th {
+  background-color: var(--ls-secondary-background-color) !important;
+  font-weight: 500; /* Ligeramente más grueso para encabezados */
+  color: var(--ls-text-color) !important;
+}
+
+/* Sin colores de fila alternos, mantén la limpieza */
+.query-table tbody tr:nth-child(odd),
+.query-table tbody tr:nth-child(even) {
+  background-color: transparent !important;
+}
+.query-table tbody tr:hover {
+  background-color: var(--ls-selection-background-color) !important; /* Efecto hover claro */
+}
+
+
+/* --- 7. Fondo Punteado del Whiteboard --- */
+.whiteboard-page {
+  background-image: var(--ls-wb-background-pattern) !important;
+  background-size: var(--ls-wb-background-size) !important;
+  background-color: var(--ls-primary-background-color) !important; /* Color base */
+}
+
+
+/* --- 8. Soporte para Diseño de Columnas (Básico) --- */
+/* Esto requiere un plugin o sintaxis de bloque específica para crear columnas.
+   Estos estilos aseguran que se vean limpios y planos si se usan. */
+.columns-container {
+  display: flex;
+  gap: 1em; /* Espacio entre columnas */
+}
+.column {
+  flex: 1; /* Distribuye el espacio equitativamente */
+  padding: 0.5em; /* Pequeño padding dentro de la columna */
+  border-right: 1px solid var(--ls-border-color); /* Separador de línea sutil */
+}
+.column:last-child {
+  border-right: none; /* Sin borde en la última columna */
+}
+
+
+/* --- Otros Elementos de la Interfaz de Usuario (Minimalista) --- */
+/* Barra lateral */
+.cp__sidebar-main-content {
+  background-color: var(--ls-secondary-background-color) !important;
+  border-right: 1px solid var(--ls-border-color) !important;
+}
+
+/* Encabezado */
+.cp__header {
+  background-color: var(--ls-secondary-background-color) !important;
+  border-bottom: 1px solid var(--ls-border-color) !important;
+}
+
+/* Área de contenido principal */
+#main-content-container,
+.main-content-container {
+  background-color: var(--ls-primary-background-color) !important;
+}
+
+/* Fondo del área del editor */
+.editor-inner {
+  background-color: var(--ls-primary-background-color) !important;
+}
+
+/* Resaltado de bloque (para el bloque de edición actual) */
+.block-highlight {
+  background-color: transparent !important; /* Elimina el resaltado de bloque predeterminado */
+  border-left: 2px solid var(--ls-link-text-color) !important; /* Línea sutil a la izquierda */
+}
+
+/* Reglas horizontales */
+hr {
+  border-top: 1px solid var(--ls-tertiary-background-color) !important;
+}
+
+/* Código en línea */
+:not(pre)>code {
+  background-color: var(--ls-secondary-background-color) !important;
+  color: var(--ls-text-color) !important;
+  border: 1px solid var(--ls-border-color) !important;
+  padding: 0.1em 0.4em;
+  border-radius: 0 !important; /* Plano */
+  font-family: "Fira Code", monospace !important; /* Fuente de código */
+}
+
+/* Bloques de código (fenced code blocks) */
+pre {
+  background-color: var(--ls-secondary-background-color) !important;
+  border: 1px solid var(--ls-border-color) !important;
+  border-radius: 0 !important;
+  padding: 1em;
+  overflow-x: auto;
+  font-family: "Fira Code", monospace !important; /* Fuente de código */
+}
+pre code {
+  background-color: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+/* Asegura que los puntos de viñeta sean visibles y estén limpios */
+.bullet-container .bullet {
+  background-color: var(--ls-text-color) !important; /* Viñeta más oscura para contraste */
+  border-radius: 0 !important; /* Asegura viñetas cuadradas */
+}
+.bullet-container .bullet.active {
+  background-color: var(--ls-link-text-color) !important; /* Color de acento para viñeta activa */
+}
+
+/* Título de página */
+.ls-page-title {
+  color: var(--ls-text-color) !important;
+  font-weight: 600 !important; /* Ligeramente más grueso para el título de página */
+}
+
+/* Fecha de página de diario */
+.journal-title .title {
+  color: var(--ls-text-color) !important;
+  font-weight: 600 !important;
+}
+
+/* --- Estilo de Resultados de Queries --- */
+/* Aplica fondo sutil y borde al contenedor de resultados de query */
+.query-results-wrap {
+  background-color: var(--ls-secondary-background-color) !important; /* Fondo sutil */
+  padding: 1em !important; /* Padding dentro de la caja */
+  margin-bottom: 1.5em !important; /* Espacio entre bloques de query */
+  border: 1px solid var(--ls-border-color) !important; /* Borde sutil */
+  border-radius: 0 !important; /* Asegura esquinas planas */
+}
+
+/* Estilo del título de la query dentro del contenedor de resultados */
+.query-results-wrap .query-title {
+  color: var(--ls-text-color) !important;
+  font-weight: 500 !important;
+  margin-bottom: 0.8em !important; /* Espacio entre título y resultados */
+}
+
+/* Asegura que los elementos individuales de resultado de query no tengan un estilo excesivo */
+.query-results-wrap .ls-block {
+  background-color: transparent !important; /* Sin fondo para bloques individuales dentro de resultados de query */
+  padding-left: 0 !important; /* Elimina padding extra para bloques anidados */
+}
+
+/* --- Estilo Específico para Páginas de Código (como custom.css) --- */
+/* Esto afectará a CodeMirror, el editor de código */
+.CodeMirror {
+  background-color: var(--ls-primary-background-color) !important; /* Fondo del editor de código */
+  border: 1px solid var(--ls-border-color) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 1em; /* Padding dentro del editor */
+}
+
+.CodeMirror-gutters {
+  background-color: var(--ls-primary-background-color) !important; /* Fondo de los números de línea */
+  border-right: 1px solid var(--ls-border-color) !important;
+}
+
+.CodeMirror-linenumber {
+  color: var(--ls-tertiary-background-color) !important; /* Color de los números de línea */
+  font-family: "Fira Code", monospace !important;
+}
+
+.CodeMirror-activeline-background {
+  background-color: var(--ls-selection-background-color) !important; /* Fondo de la línea activa */
+}
+
+/* Colores de sintaxis para CodeMirror (simplificado Nord-like) */
+.cm-comment { color: #616E88; } /* Gris azulado para comentarios */
+.cm-keyword { color: var(--nord-blue); } /* Azul para palabras clave */
+.cm-atom { color: var(--nord-purple); } /* Morado para átomos (booleanos, null) */
+.cm-number { color: var(--nord-yellow); } /* Amarillo para números */
+.cm-string { color: var(--nord-green); } /* Verde para cadenas */
+.cm-variable { color: var(--ls-text-color); } /* Color de texto principal para variables */
+.cm-property { color: var(--nord-teal); } /* Teal para propiedades */
+.cm-operator { color: var(--ls-text-color); } /* Color de texto principal para operadores */
+.cm-builtin { color: var(--nord-orange); } /* Naranja para funciones built-in */
+.cm-def { color: var(--nord-red); } /* Rojo para definiciones */
+.cm-header { color: var(--nord-blue); } /* Azul para encabezados en código */
+.cm-link { color: var(--ls-link-text-color); } /* Color de enlace para enlaces en código */
+.cm-tag { color: var(--nord-red); } /* Rojo para tags HTML/XML */
+.cm-attribute { color: var(--nord-green); } /* Verde para atributos HTML/XML */
+.cm-error { background-color: var(--nord-red); color: white; } /* Fondo rojo para errores */
+
+/* Selección de texto en CodeMirror */
+.CodeMirror-selected {
+  background-color: var(--ls-selection-background-color) !important;
+}
